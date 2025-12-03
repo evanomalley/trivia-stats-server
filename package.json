@@ -1,0 +1,28 @@
+{
+  "name": "trivia-stats-server",
+  "version": "1.0.0",
+  "description": "Fun side project to store trivia questions asked at the bar I go to",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server",
+    "dev": "nodemon server"
+  },
+  "author": "Evan",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "date-fns": "^4.1.0",
+    "dotenv": "^16.4.7",
+    "express": "^5.1.0",
+    "express-async-handler": "^1.2.0",
+    "express-rate-limit": "^8.2.1",
+    "jsonwebtoken": "^9.0.2",
+    "lodash": "^4.17.21",
+    "mongoose": "^8.9.3",
+    "mongoose-sequence": "^6.0.1",
+    "nodemon": "^3.1.9",
+    "uuid": "^11.0.3"
+  }
+}
