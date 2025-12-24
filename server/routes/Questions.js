@@ -3,7 +3,7 @@ const router = express.Router();
 const questionsController = require('../controllers/QuestionsController');
 const verifyJWT = require('../middleware/verifyJWT');
 
-//router.use(verifyJWT);
+router.use(verifyJWT);
 
 router.route('/')
     .get(questionsController.getAllQuestions)

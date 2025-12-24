@@ -18,30 +18,30 @@ const getAllUsers = asyncHandler (async (req, res) => {
 // @route POST /users
 // @access private
 const createNewUser = asyncHandler (async (req, res) => {
-    const {username, password, roles} = req.body;
+    const {email, password, roles} = req.body;
 
     // Check data
-    if(!username || !password || !Array.isArray(roles) || !roles.length){
+    if(!email || !password || !Array.isArray(roles) || !roles.length){
         return res.status(400).json({message: "All fields required"});
     }
 
     // Duplication check
-    const duplicate = await User.findOne({username}).lean().exec();
+    const duplicate = await User.findOne({email}).lean().exec();
 
     if(duplicate){
-        return res.status(409).json({message: "Duplicate username"});
+        return res.status(409).json({message: "Duplicate email"});
     }
 
     // Hash pwd
     const hPwd = await bcrpyt.hash(password, 10);
 
-    const newUser = {username, password: hPwd, roles};
+    const newUser = {email, password: hPwd, roles};
 
     // Create and store user to the db
     const user = await User.create(newUser);
 
     if(user){
-        res.status(201).json({message: `New user ${username} created`});
+        res.status(201).json({message: `New user ${email} created`});
     } else {
         res.status(400).json({message: 'Invalid data received, please try again'});
     }
@@ -52,10 +52,10 @@ const createNewUser = asyncHandler (async (req, res) => {
 // @route PATCH /users
 // @access private
 const updateUser = asyncHandler (async (req, res) => {
-    const {id, username, password, roles, active} = req.body;
+    const {id, email, password, roles, active} = req.body;
 
     // Check data
-    if(!id || !username || !Array.isArray(roles) || !roles.length || typeof active !== 'boolean'){
+    if(!id || !email || !Array.isArray(roles) || !roles.length || typeof active !== 'boolean'){
         return res.status(400).json({message: "All fields required, password optional"});
     }
 
@@ -66,13 +66,13 @@ const updateUser = asyncHandler (async (req, res) => {
     }
 
     // Duplication check
-    const duplicate = await User.findOne({username}).lean().exec();
+    const duplicate = await User.findOne({email}).lean().exec();
 
     if(duplicate && duplicate?._id.toString() !== id){
-        return res.status(409).json({message: "Duplicate username"});
+        return res.status(409).json({message: "Duplicate email"});
     }
 
-    user.username = username;
+    user.email = email;
     user.roles = roles;
     user.active = active;
 
@@ -82,7 +82,7 @@ const updateUser = asyncHandler (async (req, res) => {
 
     const updatedUser = await user.save();
 
-    res.json({message: `${updatedUser.username} updated`});
+    res.json({message: `${updatedUser.email} updated`});
 });
 
 // @desc Delete a  user
@@ -108,7 +108,7 @@ const deleteUser = asyncHandler (async (req, res) => {
 
     const result = await user.deleteOne();
 
-    const reply = `Username ${result.username} with ID ${result._id} deleted`;
+    const reply = `User ${result.email} with ID ${result._id} deleted`;
 
     res.json(reply);
 });
